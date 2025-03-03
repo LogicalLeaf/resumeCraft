@@ -4,7 +4,7 @@ import { defineStore } from 'pinia'
 export const useUserInfoStore = defineStore('useUserInfoSore',{
   state: () => ({
 
-    name:ref('admin'),
-    password:ref('123456')
+    adminName:ref('admin'),
+    adminPassword:ref('123456')
 
 })})

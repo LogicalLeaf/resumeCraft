@@ -1,5 +1,12 @@
 <script setup>
-//import collectInfo from '../views/collectInfo.vue';
+
+
+import { useResumeInfoStore } from '@/stores/resumeInfo'  // 确保路径正确
+
+// 需要执行 useResumeInfoStore() 来获取 store 实例
+const store = useResumeInfoStore()
+
+
 const handleReturn =()=>{
    window.location.href = '/collectInfo';
 }
@@ -19,8 +26,8 @@ const handleReturn =()=>{
                 <h3>个人简历</h3>
             </caption> -->
             <tr>
-                <td width="90"></td>
-                <td width="100">童子欣</td>
+                <td width="90">姓名</td>
+                <td width="100"> {{ store.formData.name }}</td>
                 <td width="89">出生日期</td>
                 <td width="113">2003.5.12</td>
                 <td width="91">性别</td>

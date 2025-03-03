@@ -8,7 +8,7 @@ const router=useRouter();
 const name= ref('')
 const password= ref('')
 const handleLogin  =()=>{
-    if(name.value===useUserInfoStore().name && password.value===useUserInfoStore().password){
+    if(name.value===useUserInfoStore().adminName && password.value===useUserInfoStore().adminPassword){
         router.push('./collectInfo');
     showToast({ type:"success", message: "Login success!" ,style:{color:'black'}});
     }  else{

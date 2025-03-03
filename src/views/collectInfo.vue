@@ -1,7 +1,17 @@
 <script setup>
 import 'vant/lib/index.css';
 import{showToast} from'vant';
-import {ref} from 'vue';
+import { ref } from 'vue'
+import { useResumeInfoStore } from '../stores/resumeInfo'
+
+const store = useResumeInfoStore()
+const name = ref('')
+
+const updateName = (value) => {
+  store.updateFormData('name', value)
+}
+ 
+
 const exitLog = () => {
 showToast({ type: 'text', message: 'Logged out successfully' });
     console.log('logged out');
@@ -30,11 +40,16 @@ const onConfirm =({selectedValues})=>{
         </div>
     <div id="content">
         <div class="content-left">  <van-cell-group inset>
-  <van-field label="姓名"  required/>
+  <van-field
+    v-model="name"
+    label="姓名"
+    required
+    @update:model-value="updateName"
+  />
   <div style="margin-left:15px; margin-top:5px;">
     <p>请选择性别</p>
-    <input type="radio" id="male" name="gender" value="male">
-<label for="male">男</label><br>
+    <input type="radio" id="male" name="gender" value="male" required >
+<label for="male" >男</label><br>
 <input type="radio" id="female" name="gender" value="female">
 <label for="female">女</label><br>
 </div>
@@ -59,8 +74,8 @@ const onConfirm =({selectedValues})=>{
 </select>
 </div>
 <div>
-     <van-field label="专业"  />
-      <van-field label="民族"  />
+     <van-field label="专业"   />
+      <van-field label="民族"   />
        <van-field label="学校"  />
        <div><p  style="margin-top:10px;margin-left:15px;;">请选择政治面貌</p>
 <select id="education" style="margin-top:10px;margin-left:15px;color:grey;">
@@ -71,11 +86,11 @@ const onConfirm =({selectedValues})=>{
    
 </select>
 </div>
-          <van-field label="籍贯"  />
+          <van-field label="籍贯"   />
 
            <van-field label="邮箱"  />
-           <van-field label="微信"  />
-           <van-field label="手机"  />
+           <van-field label="微信" />
+           <van-field label="手机"   />
            <van-cell-group inset>
   
 </van-cell-group>
