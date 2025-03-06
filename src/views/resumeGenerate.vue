@@ -1,14 +1,68 @@
 <script setup>
-
-
-import { useResumeInfoStore } from '@/stores/resumeInfo'  // 确保路径正确
-
-// 需要执行 useResumeInfoStore() 来获取 store 实例
-const store = useResumeInfoStore()
-
+import { useResumeInfoStore } from '../stores/resumeInfo.js'  
+import { onMounted} from 'vue'
+import{showToast}from'vant'
+const store = useResumeInfoStore();
+onMounted(() => {
+  console.log(store) // 确认 store 是否被正确定义
+  console.log(store.formData.name) // 确认 formData 是否正确
+})
 
 const handleReturn =()=>{
-   window.location.href = '/collectInfo';
+  
+   showToast({
+     message: '已返回填写页面',
+     position:'top',
+     style:{color:'grey', backgroundColor: 'rgba(255, 255, 255,0.7) ,height:100px,width:100px;'},
+   
+   });
+    setTimeout(() => {
+         window.location.href = '/collectInfo';
+    },1000);
+}
+const projectE='项目经历:'
+const schoolE='校园经历:'
+const professionals='专业技能:'
+const selfEva='自我评价:'
+const name='姓名:'
+const gender='性别:'
+const birthDate='出生日期:'
+const highestEducation='学历:'
+const major='专业:'
+const nation='民族:'
+const colleage='学校:'
+const hometown='籍贯:'
+const email='邮箱:'
+const wechat='微信:'
+const phone='联系方式:'
+const handleDownload =()=>{
+   const blob = new Blob([name + store.formData.name +`\n`+ gender+store.formData.gender +`\n`+ birthDate+store.formData.birthDate +`\n`
+   +highestEducation+ store.formData.highestEducation + `\n`+major+store.formData.major +`\n`+ nation 
+   + store.formData.nation +`\n`+ colleage + store.formData.colleage +`\n`+hometown+ store.formData.hometown +`\n`+ email+store.formData.email +`\n`
+   +wechat+ store.formData.wechat +`\n`+phone+ store.formData.phone +`\n\n`+professionals+`\n`+ store.formData.professionalSkills +`\n\n`+ schoolE+`\n`+ store.formData.schoolExperiences +`\n\n`+ projectE
+  +`\n` + store.formData.projectExperiences+`\n\n` +selfEva+`\n`+ store.formData.selfEvaluation], { type: 'text/plain;charset=utf-8' });
+
+
+  // 创建一个URL对象，指向该Blob对象
+  const url = URL.createObjectURL(blob);
+
+  // 创建一个a标签用于下载
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = '表格内容.txt'; // 设置下载的文件名
+
+  // 将a标签添加到DOM中并触发点击事件
+  document.body.appendChild(a);
+  a.click();
+
+  // 移除a标签并释放URL资源
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showToast({
+     message: '下载成功！',
+     position:'top',
+     style:{color:'grey', backgroundColor: 'rgba(255, 255, 255,0.7) ,height:100px,width:100px;'},
+  })
 }
 </script>
 <template>
@@ -16,7 +70,7 @@ const handleReturn =()=>{
     <div id="footer">
    <van-button type="default" class="returnBtn" @click="handleReturn">返回填写</van-button>
    <h1>我的简历</h1>
-   <van-button type="default" class="downloadBtn">下载文件</van-button>
+   <van-button type="default" class="downloadBtn" @click="handleDownload">下载文件</van-button>
     </div>
     <div id="content">
     <div id="resume">
@@ -29,54 +83,58 @@ const handleReturn =()=>{
                 <td width="90">姓名</td>
                 <td width="100"> {{ store.formData.name }}</td>
                 <td width="89">出生日期</td>
-                <td width="113">2003.5.12</td>
+                <td width="113">{{ store.formData.birthDate }}</td>
                 <td width="91">性别</td>
-                <td width="48">男</td>
-                <td width="121" rowspan="4">此处没有头像</td>
+                <td width="48">{{ store.formData.gender }}</td>
+                <td width="121" rowspan="4">
+                   
+                     
+  
+    <div style="width: 100%;height: 100;margin-left: 15px;"><van-uploader v-model="value"  style="background-color:transparent !important; border:none ;width:100%;height:100%;" /></div>
+  
+
+                </td>
             </tr>
             <tr>
                 <td>学历</td>
-                <td>本科</td>
+                <td>{{ store.formData.highestEducation }}</td>
                 <td>专业</td>
-                <td>智能财务软件工程</td>
+                <td>{{ store.formData.major }}</td>
                 <td>民族</td>
-                <td>汉</td>
+                <td>{{ store.formData.nation }}</td>
             </tr>
             <tr>
                 <td>学校</td>
-                <td> 杭州电子科技大学</td>
+                <td> {{ store.formData.colleage }}</td>
                 <td>政治面貌</td>
-                <td>群众</td>
+                <td>{{ store.formData.politicalStatus }}</td>
                 <td>联系方式</td>
-                <td>10086</td>
+                <td>{{ store.formData.phone }}</td>
             </tr>
             <tr>
                 <td>籍贯</td>
-                <td>浙江温州</td>
+                <td>{{ store.formData.hometown }}</td>
                 <td>邮箱</td>
-                <td>10086@qq.com</td>
+                <td>{{ store.formData.email }}</td>
                 <td>微信</td>
-                <td>10086nb</td>
+                <td>{{ store.formData.wechat }}</td>
             </tr>
-
+<tr>
+                <td>专业技能</td>
+                <td colspan="7" >
+                    {{ store.formData.professionalSkills }}
+                    </td>
+            </tr>
             <tr>
                 <td>项目经历</td>
                 <td colspan="7" >
-                    <ul>
-                        <li>垃圾分类系统前端开发</li>
-                        <li>脑卒中后的康复系统前端开发</li>
-                        <li>知识产权交易平台前端开发</li>
-                         <li>垃圾分类系统前端开发</li>
-                        <li>脑卒中后的康复系统前端开发</li>
-                        <li>知识产权交易平台前端开发</li>
-                         <li>垃圾分类系统前端开发</li>
-                        <li>脑卒中后的康复系统前端开发</li>
-                        <li>知识产权交易平台前端开发</li>
-                         <li>垃圾分类系统前端开发</li>
-                        <li>脑卒中后的康复系统前端开发</li>
-                        <li>知识产权交易平台前端开发</li>
-                        
-                    </ul>
+                    {{ store.formData.projectExperiences }}
+                    </td>
+            </tr>
+            <tr>
+                <td>校园经历</td>
+                <td colspan="7" >
+                    {{ store.formData.schoolExperiences }}
                     </td>
             </tr>
             <tr>
@@ -84,9 +142,7 @@ const handleReturn =()=>{
             </tr>
             <tr>
                 <td colspan="7" height="200">
-                    我在大学期间任职学习委员，工作认真负责，
-                    学习中，踏实学习本专业知识，和小组合作时，负责踏实
-                    具有强烈的团队合作精神和工作能力。（套话套话）
+                    {{ store.formData.selfEvaluation }}
                 </td>
             </tr>
         </table>
@@ -110,12 +166,15 @@ h1{
     align-items:center;
    width: 1738px;
  height: 1099px; 
+ background-image: url('../imgs/背景图片.jpg');
+ opacity: 0.9;
+ position:fixed;
 
 }
 #footer{
     display:flex;
     align-items:center;
-    background-color: rgb(200, 219, 219);
+    /* background-color: rgb(200, 219, 219); */
     width:100%;
     height:100px;
     justify-content: space-between;;
@@ -126,7 +185,7 @@ h1{
     align-items:center;
     width:100%;
     height:90%;
-    background-color: antiquewhite;
+    /* background-color: antiquewhite; */
 }
 #resume{
     display:flex;
@@ -138,10 +197,10 @@ h1{
 
 }
 .returnBtn{
-   margin-left: 50px;
+   margin-left: 250px;
 }
 .downloadBtn{
-     margin-right: 50px;
+     margin-right: 350px;
 }
  table {
             border-collapse: collapse;
@@ -150,6 +209,6 @@ h1{
 
         table,
         td {
-            border: 2px solid rgb(86, 86, 86);
+            border: 2px solid rgb(30, 29, 29);
         }
 </style>

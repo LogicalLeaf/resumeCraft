@@ -7,13 +7,19 @@ import {showToast} from 'vant'
 const router=useRouter();
 const name= ref('')
 const password= ref('')
+
 const handleLogin  =()=>{
-    if(name.value===useUserInfoStore().adminName && password.value===useUserInfoStore().adminPassword){
+    if(name.value===useUserInfoStore().adminName && password.value===useUserInfoStore().adminPassword){ 
+       
+        showToast({ type:"success", message: "登录成功!" ,style:{color:'grey', backgroundColor: 'rgba(255, 255, 255,0.7)'}}); 
+       setTimeout(() => {
         router.push('./collectInfo');
-    showToast({ type:"success", message: "Login success!" ,style:{color:'black'}});
+       }, 1000);
+
+   
     }  else{
 
-    showToast({ type:"fail", message: "Login failed!" });
+    showToast({ type:"fail", message: "登陆失败! 账号或密码错误",style:{color:'tomato', backgroundColor: 'rgba(255, 255, 255,0.7)'}});
 
 }
 }
@@ -39,10 +45,18 @@ const handleLogin  =()=>{
     
 </template>
 <style>
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column; /* 在小屏幕上垂直排列 */
+    }
+}
+
         
         #container{
-            width: 1274px;
-           height: 1122px; 
+        /* width: 1274px;
+           height: 1122px;  */
+           height:100vh;
+            width:100vw;
             display: flex;
            justify-content: center;
            align-items: center;
@@ -53,6 +67,7 @@ const handleLogin  =()=>{
             background-size:cover;
             position: fixed;
            
+            background-image:url('../imgs/背景图片.jpg')
           
         }
         .welcomeText{
@@ -64,11 +79,12 @@ const handleLogin  =()=>{
         #login{
             width: 50%;
             height:90%;
-            background-color: aliceblue;
+            background-color: white;
             display: flex;
            flex-direction:column;
            align-items: center;
            border-radius: 20px;
+           opacity:0.5;    
            
         }
         #loginInfo{
@@ -80,14 +96,26 @@ const handleLogin  =()=>{
         }
         .username{
             margin-top:100px;
-            height:50px;border-radius:20px;
+            height:60px;
+            border-radius:20px;
+           border: 1px solid grey;
+           
+              padding-left:20px;
+            
+            
 
         }
          .userpassword{
-            margin-top:100px; height:50px;border-radius:20px;
+            margin-top:100px; height:60px;
+            border-radius:20px;
+            border: 1px solid grey;
+            padding-left:20px;
         }
         .loginBtn{
-            margin-top:100px;border-radius:20px;
+            margin-top:100px;
+            border-radius:20px;
+            height:50px;
+            border:none;
         }
 
     </style>
